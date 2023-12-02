@@ -8,24 +8,17 @@
 <script src="js/paper-full.js"></script>
 <script src="js/paper-extra.js"></script>
 <script src="js/PaperDesignTool.js"></script>
-
-
 <script type="text/javascript">
 	CIRCLE_RADIUS = 50;
-
-	/* Main function */
 	$(function(){
 		window.tool = new PaperDesignTool({canvas: $('canvas')})
 		$("button#download-svg").click(function(){window.tool.save_svg()})
 		draw_interactive_circle()
 		paper.view.update()
 	})
-
-
 	function draw_interactive_circle(){
 		console.log("\t", "Direct Manipulation Drawing Routine")
 		BOX_SIZE = new paper.Size(paper.view.bounds.width, 200)
-
 		box = new paper.Path.Rectangle({
 			rectangle: BOX_SIZE,
 			position: paper.view.bottomCenter, 
@@ -39,11 +32,27 @@
 			position: paper.view.center, 
 			fillColor: "white"
 		})
-		// INTERACTIVITY
-		// TODO: YOUR CODE HERE
+		main_circle.on({
+		    mouseenter: function(event) {
+		        this.scale(1.5);
+		    },
+		    mouseleave: function(event) {
+		        this.scale(1/1.5);
+		        if(event.point.y<200)
+		        {
+					main_circle.fillColor='red'
+				}
+				else
+		        {
+					main_circle.fillColor='white'
+				}
+		    }
+		}); 
+		main_circle.onMouseDrag = function(event) {
+		    this.position = event.point; 
+		}
 	}
 </script>
-
 <link href="css/application.css" rel="stylesheet"/>
 <canvas resize> Hello </canvas>
 <button id="download-svg"> SVG </button>

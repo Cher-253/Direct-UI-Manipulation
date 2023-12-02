@@ -8,24 +8,18 @@
 <script src="js/paper-full.js"></script>
 <script src="js/paper-extra.js"></script>
 <script src="js/PaperDesignTool.js"></script>
-
-
 <script type="text/javascript">
 	OUTER_RADIUS = 200
 	MAJOR_TICK_LENGTH = 15
 	MINOR_TICK_LENGTH = 5
 	CENTER_HOLE_RADIUS = 5
 	LABEL_RADIUS = 40
-
-	/* Main function */
 	$(function(){
 		window.tool = new PaperDesignTool({canvas: $('canvas')})
 		$("button#download-svg").click(function(){window.tool.save_svg()})
 		draw_protractor()
 		paper.view.update()
 	})
-
-
 	function draw_protractor(){
 		console.log("\t", "Protractor Drawing Routine")
 		outer = new paper.Path.Circle({
@@ -45,31 +39,45 @@
 		})
 		major_lines = _.range(0, 360, 45)
 		minor_lines = _.range(0, 360, 5)
-		
-		// COMMENT THESE LINES AS 
-		// YOU IMPLEMENT THE FUNCTIONS BELOW
 		draw_lines(outer, major_lines, MAJOR_TICK_LENGTH)
-		// draw_lines(outer, minor_lines, MINOR_TICK_LENGTH)
-		// draw_text(outer, major_lines, LABEL_RADIUS)
+		draw_lines(outer, minor_lines, MINOR_TICK_LENGTH)
+		draw_text(outer, major_lines, LABEL_RADIUS)
 	}
-
-	// Given an array of degree locations [0, 45, 90...], 
-	// Add a PointText label at the degree location
-	// at the specified distance from the center.
-	// Use a Courier New, bold, black, 25 pt font.
-
 	draw_text = function(outer, lines, distance){
-		// TODO
+		var count = lines.length; 
+		var length = outer.length;
+		for(var i = 0; i< count; i++)
+		{
+			var offset = (lines[i]/360)*2*(Math.PI)*(OUTER_RADIUS) 
+			var point = outer.getPointAt(offset);
+			console.log("point ",point)
+			console.log("offset ",offset)
+			var normal = outer.getNormalAt(offset) .multiply (-distance);
+			var text = new paper.PointText({
+				point: point,
+				content: lines[i],
+				fillColor:'black',
+				fontFamily: 'Courier New',
+				fontWeight: 'bold',
+				fontSize: 25
+			});
+			text.position = point.add(normal) 
+		}
 	}
-
-	// Given an array of degree locations [0, 45, 90...], 
-	// draw a line of specified length from the edge of
-	// the outer circle towards the center.
 	draw_lines = function(outer, lines, length){
-		// TODO
+		var count = lines.length; 
+		for(var i = 0; i< count; i++)
+		{
+			var offset = (lines[i]/360)*2*(Math.PI)*(OUTER_RADIUS) 
+			var point = outer.getPointAt(offset);
+			var normal = outer.getNormalAt(offset).multiply(-length);
+		    var line = new paper.Path({
+		        segments: [point, point.add(normal)],
+		        strokeColor: 'black'
+		    });
+		}
 	}
 </script>
-
 <link href="css/application.css" rel="stylesheet"/>
 <canvas resize> Hello </canvas>
 <button id="download-svg"> SVG </button>

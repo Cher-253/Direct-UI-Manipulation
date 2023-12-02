@@ -1,3 +1,4 @@
+
 <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.2/underscore-umd-min.js
 "></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -8,43 +9,239 @@
 <script src="js/paper-full.js"></script>
 <script src="js/paper-extra.js"></script>
 <script src="js/PaperDesignTool.js"></script>
+<!-- //including libs for test 
+ --><script type="text/javascript" src="http://code.jquery.com/ jquery-1.8.1.min.js"></script>
 
+<script type="text/javascript" src="js/jquery.color.js"></script>
+
+<script type="text/javascript" src="js/color_mixer.js"></script>
+<!-- //includes end
+ -->
+
+<!-- cross hatching -- gave user control - uniform patterns and haching on lower speeds.  -->
 
 <script type="text/javascript">
-    DEFAULT_COLORING_PAGE = "/assets/mandala.svg";
-    // DEFAULT_COLORING_PAGE = "/assets/cow.svg";
-    // DEFAULT_COLORING_PAGE = "/assets/spirograph.svg";
-
-    /* Main function */
+    DEFAULT_COLORING_PAGE = "/assets/cow.svg";
     $(function(){
         window.tool = new PaperDesignTool({canvas: $('canvas')})
         $("button#download-svg").click(function(){window.tool.save_svg()})
-
         addColoringPage(DEFAULT_COLORING_PAGE)
         palette = addColorPalette()
-        // Examples: Comment out to activate other interactions
-        rainbowInteraction(palette);
-        // paintBucketInteraction(palette);
-        // interactionA()
-        // interactionB()
+        interactionA()
         paper.view.update(palette)
-
-
     })
-    interactionA = function(palette){
+    var rectangle = new paper.Rectangle(new paper.Point(150, 150), new paper.Point(50, 50));
+  interactionA = function(palette)
+  {
       console.log("Interaction A Activated!")    
-      // TODO
-    }
+          var flagMD = 0;
+          var textLabelBI = new paper.PointText({
+            point:[100,10],
+            justification: 'center',
+            fillColor:'black',
+            content:'Brush interactions'
+          });
+          var BrushInterSkel = new paper.Path.Rectangle({
+              point:[20,20],
+              size:[50,40],
+              fillColor: 'pink'
+          });
+          BrushInterSkel.onClick=function(event)
+          {
+            console.log("flag val 1")
+            flagMD = 1;
+          }
+          var BrushInterHatch = new paper.Path.Rectangle({
+              point:[140,20],
+              size:[50,40],
+              fillColor: 'green'
+          });
+          BrushInterHatch.onClick=function(event)
+          {
+            console.log("flag val 2")
+            flagMD = 2;
+          } 
+          var textMinLabel = new paper.PointText({
+            point:[45,95],
+            justification: 'center',
+            fillColor:'black',
+            content:'Minimum Width'
+          });
+          var rectMinWidth = new paper.Path.Rectangle({
+              point:[20,100],
+              size:[40,40],
+              fillColor: 'white',
+          });
+          var textInsideMin = new paper.PointText({
+                  point:[45,130],
+                  justification: 'center',
+                  fillColor:'black',
+                  content:'10',
+          });
+          var textMaxLabel = new paper.PointText({
+              point:[45,195],
+              justification: 'center',
+              fillColor:'black',
+              content:'Maximum Width'
+          });
+          var rectMaxWidth = new paper.Path.Rectangle({
+              point:[20,200],
+              size:[40,40],
+              fillColor: 'white'
+          });
+          var textInsideMax = new paper.PointText({
+              point:[45,220],
+              justification: 'center',
+              fillColor:'black',
+              content:'90'
+          });
+          tool.minDistance = 10;
+          tool.maxDistance = 45;
+          var path;
+          paper.tool = new paper.Tool
+          ({
+                onMouseDown: function(event)
+                {
+                      path = new paper.Path();
+                      path.strokeColor = '#00000';
+                      path.selected = true;
+                      path.add(event.point);
+                      console.log(path);
+                },
+                onMouseDrag: function(event)
+                {
+                  if (flagMD==1)
+                  {
+                    console.log("inside flag1")
+                      var step = event.delta;
+                      step.angle += 90;
+                      var top = event.middlePoint.add(step);
+                      var bottom = event.middlePoint.subtract(step);
+                      var line = new paper.Path();
+                      line.strokeColor = 'green';
+                      line.add(top);
+                      line.add(bottom);
+                      path.add(top);
+                      console.log(path)
+                      path.insert(0, bottom);
+                  }  
+                  if (flagMD==2)
+                  {
+                    var circle = new paper.Path.Circle({
+                    center: event.middlePoint,
+                    radius: 10
+                    });
+                    circle.strokeColor = 'green'; 
+                    var rect = new paper.Path.Rectangle({
+                    point:event.middlePoint,
+                    size: [20,20]
+                    });
+                    rect.strokeColor = 'pink'; // red
+                  } 
+                }
+          })
+    }     
     interactionB = function(palette){
       console.log("Interaction B Activated!")    
-      // TODO
-    }
+          var checkbox1 = new paper.Path.Rectangle({
+              point:[600,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox1.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          var checkbox2 = new paper.Path.Rectangle({
+              point:[670,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox2.onClick = function(event) {
+              this.fillColor = 'green';
+          } 
+          var checkbox3 = new paper.Path.Rectangle({
+              point:[730,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox3.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          var checkbox4 = new paper.Path.Rectangle({
+              point:[790,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox4.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          var checkbox5 = new paper.Path.Rectangle({
+              point:[850,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox5.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          var checkbox6 = new paper.Path.Rectangle({
+              point:[910,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox6.onClick = function(event) {
+              this.fillColor = 'green';
+          }
 
-
-    /*
-      Traditional PaintBucket
-    */
-    paintBucketInteraction = function(palette){
+          var checkbox7 = new paper.Path.Rectangle({
+              point:[970,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox7.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          var checkbox8 = new paper.Path.Rectangle({
+              point:[1030,830],
+              size:[20,20],
+              fillColor: 'red'
+          });
+          checkbox8.onClick = function(event) {
+              this.fillColor = 'green';
+          }
+          color_1 = $.Color("#e6b319");
+          color_2 = $.Color("#e619b2");
+          result_color = Color_mixer.mix(color_1,color_2);
+          var palleteFinal1 = new paper.Path.Circle({
+              center: (200,100),
+              radius: 70,
+              fillColor: 'white'
+          });
+          palleteFinal1.onClick = function(event) {
+              this.fillColor = '#E66666';
+          }
+          var palleteLabel1 = new paper.PointText({
+              point:[100,180],
+              justification: 'center',
+              fillColor:'black',
+              size: 50,
+              content:'First New Color Created!'
+          });
+          var palleteFinal2 = new paper.Path.Circle({
+              center: (500,300),
+              radius: 70,
+              fillColor: 'black'
+          });
+          palleteFinal2.onClick = function(event) {
+              this.fillColor = '#008080';
+          }
+          var palleteLabel2 = new paper.PointText({
+              point:[300,180],
+              justification: 'center',
+              fillColor:'black',
+              size: 50,
+              content:'Second New Color Created!'
+          });
+paintBucketInteractionTemp = function(palette){
       console.log("PaintBucket Interaction Activated!")    
       hitOptions = {
         stroke: false,
@@ -60,15 +257,34 @@
           _.each(hitResults, function(h) {
             if (h.item.fillColor.brightness === 0){return;}
             if (h.item.ui){return;}
-            h.item.fillColor = palette.lastColor;
+            h.item.fillColor = '#E66666';
           });
         }
-      }); // END TOOL
+      });
     }
-
-    /*
-      Turns everything into a rainbow fill.
-    */
+         paintBucketInteractionTemp(palette);
+paintBucketInteractionColor2 = function(palette){
+      console.log("PaintBucket Interaction Activated!")    
+      hitOptions = {
+        stroke: false,
+        fill: true,
+        tolerance: 1,
+        minDistance: 10
+      };
+      paper.tool = new paper.Tool({
+        name: "paintBucket",
+        onMouseDown: function(event) {
+          scope = this;
+          hitResults = paper.project.hitTestAll(event.point, hitOptions);
+          _.each(hitResults, function(h) {
+            if (h.item.fillColor.brightness === 0){return;}
+            if (h.item.ui){return;}
+            h.item.fillColor = '#008080';
+          });
+        }
+      }); 
+    }
+    }
     rainbowInteraction = function(palette){
       console.log("Rainbow Interaction Activated!")    
       hitOptions = {
@@ -94,9 +310,8 @@
               }
           });
         }
-      }); // END TOOL
+      });
     }
-
     addColoringPage = function(url) {
       console.log("\t> Coloring Page Loading:", url);
       paper.project.importSVG(url, {
@@ -106,7 +321,6 @@
           console.error("Could not load", ops.url);
         },
         onLoad: function(item) {
-          // item.position = paper.view.center;
           box = paper.view.bounds.expand(-100)
           box.height = box.height - 100
           item.fitBounds(box);
@@ -114,9 +328,7 @@
         }
       });
     };
-
     addColorPalette = function(){
-
       makeUI = function() {
         var bg, c, g, hues, num_of_swatches;
         num_of_swatches = 8;
@@ -161,7 +373,6 @@
         });
         return g.scale(1.5);
       };
-
     bindInteraction = function() {
       var palette, swatches;
       palette = paper.project.getItem({
@@ -177,17 +388,13 @@
           palette.lastColor = this.fillColor;
         }
       });
-
-
       return palette;
     };
-
     makeUI()
     palette = bindInteraction()
     return palette;
   }
 </script>
-
 <link href="css/application.css" rel="stylesheet"/>
 <canvas resize> Hello </canvas>
 <button id="download-svg"> SVG </button>

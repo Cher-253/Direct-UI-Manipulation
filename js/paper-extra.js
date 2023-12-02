@@ -1,9 +1,5 @@
 (function() {
   window.loadCustomLibraries = function() {
-
-    /*Map path's perimeter points into jsclipper format
-    [[{X:30,Y:30},{X:130,Y:30},{X:130,Y:130},{X:30,Y:130}]]
-     */
     var toClipperPoints;
     toClipperPoints = function(path, offset) {
       var points;

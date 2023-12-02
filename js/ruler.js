@@ -41,16 +41,3 @@ Ruler.gauge2pts = function(v){
 Ruler.ringsize2mm = function(v){
 	return 11.63 + 0.8128 * v;
 }
-
-// Ruler.FtoC = function(F){
-// 	return (F − 32)*(5/9);
-// }
-// Ruler.CtoF = function(C){
-// 	return (C*9/5) + 32;
-// }
-// Ruler.JtoC = function(j){
-// 	return 0.00052656507646646 * j;
-// }
-// Ruler.CtoJ = function(C){
-// 	return C/0.00052656507646646;
-// }
